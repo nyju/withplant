@@ -16,9 +16,14 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().sameOrigin(); //x-frame-options 동일 출처일경우만
+
         http.authorizeRequests()
-                .mvcMatchers("/", "/login", "/sign-up").permitAll() // 전체 접근 허용
+                .mvcMatchers("/", "/login", "/sign-up","/h2-console/*", "/h2-console").permitAll() // 전체 접근 허용
                 .anyRequest().authenticated();
+
+        http.csrf().disable(); //CSRF Token 비활성화
+
     }
 
     @Override

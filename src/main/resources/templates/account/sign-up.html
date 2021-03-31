@@ -2,28 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout/default">
-
+<style>
+div#main {min-width: 400px;max-width: 680px;}
+</style>
 <div layout:fragment="content">
 <!-- Wrapper -->
     <div id="wrapper" style="padding: 70px 500px 70px 500px;">
         <div id="main">
             <article class="post">
                 <section>
-                <form method="post" action="#">
+                    <h3>회원가입</h3>
+                <form method="post" th:action="@{/sign-up}" th:object="${signUpForm}">
                     <div class="row gtr-uniform">
                         <div class="col-12">
-                            <input type="text" name="demo-name" id="demo-name" value="" placeholder="nickname" />
+                            <input type="text" th:field="*{nickname}" name="demo-name" id="nickname"  placeholder="nickname" required minlength="3" maxlength="20"/>
                         </div>
                         <div class="col-12">
-                            <input type="email" name="demo-email" id="demo-email" value="" placeholder="email" />
+                            <input type="email" th:field="*{email}" name="demo-email" id="demo-email" value="" placeholder="email" />
                         </div>
                         <div class="col-12">
-                            <input type="password" name="demo-email" value="" placeholder="password" />
+                            <input type="password" th:field="*{password}" name="demo-email" value="" placeholder="password"  required minlength="8" maxlength="20">
                         </div>
 
                         <div class="col-12-xsmall">
                             <ul class="actions">
-                                <li><input type="submit" value="join" /></li>
+                                <li><input type="submit" value="확인" /></li>
                             </ul>
                         </div>
                     </div>
