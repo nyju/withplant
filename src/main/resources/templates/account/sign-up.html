@@ -2,38 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout/default">
-<style>
-div#main {min-width: 400px;max-width: 680px;}
-</style>
+
 <div layout:fragment="content">
-<!-- Wrapper -->
+    <style>
+        div#main {min-width: 400px;max-width: 680px;}
+        .is-server ~ .invalid-feedback {display: none;}
+    </style>
+    <!-- Wrapper -->
     <div id="wrapper" style="padding: 70px 500px 70px 500px;">
         <div id="main">
             <article class="post">
                 <section>
                     <h3>회원가입</h3>
-                <form method="post" th:action="@{/sign-up}" th:object="${signUpForm}">
-                    <div class="row gtr-uniform">
-                        <div class="col-12">
-                            <input type="text" th:field="*{nickname}" name="demo-name" id="nickname"  placeholder="nickname" required minlength="3" maxlength="20"/>
-                        </div>
-                        <div class="col-12">
-                            <input type="email" th:field="*{email}" name="demo-email" id="demo-email" value="" placeholder="email" />
-                        </div>
-                        <div class="col-12">
-                            <input type="password" th:field="*{password}" name="demo-email" value="" placeholder="password"  required minlength="8" maxlength="20">
-                        </div>
+                    <form class="needs-validation" method="post" th:action="@{/sign-up}" th:object="${signUpForm}"
+                          id="signUpForm" novalidate>
+                        <div class="row gtr-uniform">
+                            <div class="col-12">
+                                <input type="text"
+                                       th:class="${#fields.hasErrors('nickname')} ? 'form-control is-invalid is-server' : 'form-control'"
+                                       th:field="*{nickname}" name="demo-name" id="nickname" placeholder="nickname"
+                                       required minlength="3" maxlength="20">
+                                <div class="invalid-feedback">3~20자 사이로 입력해주세요.</div>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}"
+                                       th:errors="*{nickname}">Nickname Error</small>
+                            </div>
+                            <div class="col-12">
+                                <input type="email"
+                                       th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid is-server' : 'form-control'"
+                                       th:field="*{email}" name="demo-email" id="demo-email" value=""
+                                       placeholder="email" required>
+                                <div class="invalid-feedback">올바른 이메일을 입력해주세요.</div>
+                                <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}"
+                                       th:errors="*{email}">Email Error</small>
+                            </div>
+                            <div class="col-12">
+                                <input type="password" class="form-control" th:field="*{password}" name="demo-email"
+                                       value="" placeholder="password" required minlength="8" maxlength="20">
+                                <div class="invalid-feedback">8~20자 사이로 입력해주세요.</div>
+                            </div>
 
-                        <div class="col-12-xsmall">
-                            <ul class="actions">
-                                <li><input type="submit" value="확인" /></li>
-                            </ul>
+                            <div class="col-12-xsmall">
+                                <ul class="actions">
+                                    <li><input type="submit" value="JOIN"/></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
                 </section>
             </article>
         </div>
     </div>
+
+    <script type="application/javascript">
+        (function () {
+            'use strict';
+
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+
+                // Loop over them and prevent submission
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            }, false)
+        }())
+    </script>
 </div>
 </html>
