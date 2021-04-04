@@ -22,7 +22,11 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/", "/login", "/sign-up","/h2-console/*", "/h2-console").permitAll() // 전체 접근 허용
                 .anyRequest().authenticated();
 
-        http.csrf().disable(); //CSRF Token 비활성화
+        http.formLogin() // 커스텀한 로그인페이지 URL. 설정하지 않으면 시큐리티기본 로그인페이지가 보임
+                .loginPage("/index").loginProcessingUrl("/login").permitAll(); // GET, POST 모두 동일한 경로를 사용
+
+        http.logout().logoutSuccessUrl("/");
+       // http.csrf().disable(); //CSRF Token 비활성화
 
     }
 

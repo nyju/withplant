@@ -13,14 +13,13 @@ import javax.validation.Valid;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     public Member registerMember(@Valid SignUpForm signUpForm){
-        System.out.println("registerMember");
         Member member = new Member();
         member.setEmail(signUpForm.getEmail());
         member.setNickname(signUpForm.getNickname());
@@ -29,4 +28,15 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(email);
+
+        if (member == null) {
+            System.out.println("UsernameNotFount");
+            throw new UsernameNotFoundException(email);
+        }
+
+        return new UserMember(member);
+    }
 }

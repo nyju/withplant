@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
 
-</body>
+<div layout:fragment="content">
+    <style>
+        div#main {min-width: 400px;max-width: 680px;}
+        .is-server ~ .invalid-feedback {display: none;}
+    </style>
+    <!-- Wrapper -->
+    <div id="wrapper" style="padding: 70px 500px 70px 500px;">
+        <div id="main">
+            <article class="post">
+                <section>
+                    <h3>로그인</h3>
+                     <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                            <p>이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
+                            <p>또는 확인되지 않은 이메일을 사용했습니다. 이메일을 확인해 주세요.</p>
+                            <p>
+                                확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용하세요.
+                            </p>
+                        </div>
+                            <form class="needs-validation col-12" action="#" th:action="@{/login}" method="post" novalidate>
+                                <div class="row gtr-uniform modal-body" style="padding: 30px 60px 30px 50px;">
+                                    <div class="col-12">
+                                        <input type="email" name="username" id="username" value="" placeholder="email" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="password" name="password" id="password" value="" placeholder="password" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="button fit small" type="submit" aria-describedby="submitHelp">로그인</button>
+                                    </div>
+                                </div>
+                            </form>
+                </section>
+            </article>
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        (function () {
+            'use strict';
+
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+
+                // Loop over them and prevent submission
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            }, false)
+        }())
+    </script>
+</div>
 </html>
