@@ -49,7 +49,6 @@
             padding-right: 5px;
             padding-left: 36px;
         }
-        .row.gtr-uniform > * { padding-top: 0;}
         .modal-header .btn-close { margin: 0;}
         .modal-header .btn-close { margin: 0;}
     </style>
@@ -67,7 +66,7 @@
         <ul>
             <li sec:authorize="!isAuthenticated()" data-bs-toggle="modal" data-bs-target="#exampleModal"><a href='javascript:void(0);'>로그인</a></li>
             <li sec:authorize="!isAuthenticated()"><a th:href="@{/sign-up}">회원가입</a></li>
-            <li sec:authorize="isAuthenticated()"><a th:href="@{/register}">글쓰기</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/regeisterAlbum}">글쓰기</a></li>
         </ul>
     </nav>
     <nav class="main">
