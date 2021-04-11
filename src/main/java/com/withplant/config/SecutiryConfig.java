@@ -33,6 +33,6 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
 
-        web.ignoring().antMatchers("/assets/**", "/images/**");
+        web.ignoring().antMatchers("/assets/**", "/images/**", "/node_modules/**");
     }
 }
