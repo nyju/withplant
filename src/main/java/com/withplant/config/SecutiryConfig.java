@@ -1,8 +1,10 @@
 package com.withplant.config;
 
 
+import com.withplant.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,13 +28,14 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/index").loginProcessingUrl("/login").permitAll(); // GET, POST 모두 동일한 경로를 사용
 
         http.logout().logoutSuccessUrl("/");
+
+        http.csrf().ignoringAntMatchers("/h2-console/**");
        // http.csrf().disable(); //CSRF Token 비활성화
 
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-
         web.ignoring().antMatchers("/assets/**", "/images/**", "/node_modules/**");
     }
 }

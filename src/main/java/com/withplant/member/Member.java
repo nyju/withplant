@@ -1,19 +1,25 @@
 package com.withplant.member;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.withplant.album.Album;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 
     @Id
     @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     @Column(unique = true)
@@ -30,5 +36,6 @@ public class Member {
     @Basic(fetch = FetchType.EAGER) // varchar255사이즈보다 커질수 있기 때문에 Lob으로 설정
     private String profileImage;
 
-
+    @OneToMany(mappedBy = "member")
+    private List<Album> albums = new ArrayList<>();
 }
