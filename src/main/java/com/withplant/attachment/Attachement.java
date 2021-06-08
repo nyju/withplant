@@ -28,8 +28,9 @@ public class Attachement {
     /** 파일 크기 */
     private long size;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
+
 
 }

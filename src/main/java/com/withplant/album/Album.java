@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +33,7 @@ public class Album {
 
     private int status;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Attachement> attachements = new HashSet<>();
 
     public void addAttachement(Attachement attachement) {
