@@ -3,6 +3,7 @@ package com.withplant.attachment;
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,10 @@ import java.util.UUID;
 public class AttachementController {
 
     private final String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
-    private final String uploadPath = Paths.get("C:", "Users", "ny", "dev", "IdeaProjects", "wpUpload", today).toString();
+    //private final String uploadPath = Paths.get("C:", "Users", "ny", "dev", "IdeaProjects", "wpUpload", today).toString();
+
+    @Value("${attachement.repository}")
+    private String repository;
 
     private final String getRandomString() {
         return UUID.randomUUID().toString().replaceAll("-", "");
@@ -29,14 +33,11 @@ public class AttachementController {
 
     @RequestMapping(value = "/upload")
     public void upload(HttpServletResponse response, HttpServletRequest request, @RequestParam("uploadFile") MultipartFile[] uploadFiles) throws IOException {
-
-        System.out.println("upload action");
-        System.out.println(uploadFiles);
+        String uploadPath = Paths.get(repository, today).toString();
         JSONArray arr = new JSONArray();
 
         for (MultipartFile uploadFile : uploadFiles) {
 
-            System.out.println(uploadFile.getOriginalFilename());
             File dir = new File(uploadPath);
             if (dir.exists() == false) {
                 dir.mkdirs();
@@ -49,7 +50,7 @@ public class AttachementController {
             JSONObject obj = new JSONObject();
 
             uploadFile.transferTo(target);
-            obj.put("path", target.getPath());
+            obj.put("path", today + "/" +saveName);
             obj.put("saveName", saveName);
             obj.put("fileName", uploadFile.getOriginalFilename());
             obj.put("size", uploadFile.getSize());

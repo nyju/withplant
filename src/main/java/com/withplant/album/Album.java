@@ -33,6 +33,10 @@ public class Album {
 
     private int status;
 
+    private int opnCnt;
+
+    private int likeCnt;
+
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Attachement> attachements = new HashSet<>();
 
