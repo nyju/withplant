@@ -4,6 +4,7 @@ import com.withplant.attachment.Attachement;
 import com.withplant.member.Member;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,11 +32,14 @@ public class Album {
 
     private boolean isvisb;
 
-    private int status;
-
+    @ColumnDefault("0")
     private int opnCnt;
 
+    @ColumnDefault("0")
     private int likeCnt;
+
+    private int status;
+
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Attachement> attachements = new HashSet<>();

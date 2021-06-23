@@ -3,7 +3,6 @@ package com.withplant.album;
 import com.withplant.attachment.Attachement;
 import com.withplant.member.AuthUser;
 import com.withplant.member.Member;
-import com.withplant.member.UserMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,4 +43,7 @@ public class AlbumController {
 
         return "redirect:";
     }
+
+
+
 }

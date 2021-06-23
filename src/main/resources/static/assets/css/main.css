@@ -3613,3 +3613,5 @@ input, select, textarea {
 
 /*custom*/
 #wrapper {padding: 70px 200px 70px 200px;}
+#albumList time.published {justify-content: flex-end;}
+#albumList .image.featured {margin: 1em 0 3em 0;}
