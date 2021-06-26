@@ -51,6 +51,21 @@
         }
         .modal-header .btn-close { margin: 0;}
         .modal-header .btn-close { margin: 0;}
+        .carousel-control-next, .carousel-control-prev {height:100%;}
+        article#albumList {box-shadow:none;}
+        article#albumList > div#rgstUser {
+            padding-bottom: 10px;
+            text-align: right;
+        }
+        div#wpCarouse0 > button{
+            box-shadow : none;
+        }
+        div#wpCarouse0 > button:hover{
+            box-shadow: none;
+            color : transparent;
+        }
+
+
     </style>
 
     <h1><a href="/">With Plant</a></h1>
@@ -94,11 +109,17 @@
         <section>
             <ul class="links">
                 <li>
-                    <a href="#">
-                        <h3>Lorem ipsum</h3>
+                    <a th:href="@{/profile}">
+                        <h3 th:text="${#authentication.name}">Lorem ipsum</h3>
                         <p>Feugiat tempus veroeros dolor</p>
                     </a>
                 </li>
+                <!-- <li>
+                     <a href="#">
+                         <h3>Lorem ipsum</h3>
+                         <p>Feugiat tempus veroeros dolor</p>
+                     </a>
+                 </li>-->
             </ul>
         </section>
 
@@ -106,9 +127,9 @@
         <section>
             <ul class="actions stacked">
                 <li>
-                <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                    <button class="button large fit" type="submit">로그아웃</button>
-                </form>
+                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                        <button class="button large fit" type="submit">로그아웃</button>
+                    </form>
                 </li>
             </ul>
         </section>
@@ -122,7 +143,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 id="loginTitle"><font color="#556b2f">W</font>ITH <font color="#556b2f">P</font>LANT</h5>
-                  <!--  <img src="/images/plant2.png" alt="" width="30px"/>-->
+                    <!--  <img src="/images/plant2.png" alt="" width="30px"/>-->
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form class="needs-validation col-12" action="#" th:action="@{/login}" method="post" novalidate>
