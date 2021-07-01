@@ -1,6 +1,7 @@
 package com.withplant.album;
 
 import com.withplant.attachment.Attachement;
+import com.withplant.comment.Comment;
 import com.withplant.member.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +27,9 @@ public class Album {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "album")
+    private List<Comment> comments = new ArrayList<>();
 
     @Lob
     private String content;

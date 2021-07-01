@@ -1984,6 +1984,10 @@ input, select, textarea {
 				color: rgba(160, 160, 160, 0.3) !important;
 			}
 
+			button.button-sm{
+				line-height: 3.8125em;
+				height: 3.8125em;
+			}
 /* Form */
 
 	form {

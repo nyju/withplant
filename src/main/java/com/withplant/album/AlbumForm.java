@@ -16,11 +16,11 @@ public class AlbumForm {
     String content;
     Set<Attachement> attachements;
 
-    @Getter
+/*    @Getter
     @Setter
     public static class AlbumFile {
         private String fileName;
         private String saveName;
         private String path;
-    }
+    }*/
 }
