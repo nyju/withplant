@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -14,13 +13,10 @@ import java.util.List;
 @RequestMapping("/comment")
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @PostMapping("/write/{itemId}")
     public ResponseEntity<List<Comment>> writeComment(@AuthUser Member member, @PathVariable Long itemId, @RequestBody CommentForm commentForm) {
-
-        System.out.println(commentForm.getContent());
-        System.out.println(itemId);
 
         commentService.saveComment(member, commentForm, itemId);
 
