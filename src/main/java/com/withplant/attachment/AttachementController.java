@@ -22,7 +22,6 @@ import java.util.UUID;
 public class AttachementController {
 
     private final String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
-    //private final String uploadPath = Paths.get("C:", "Users", "ny", "dev", "IdeaProjects", "wpUpload", today).toString();
 
     @Value("${attachement.repository}")
     private String repository;
@@ -36,6 +35,7 @@ public class AttachementController {
         String uploadPath = Paths.get(repository, today).toString();
         JSONArray arr = new JSONArray();
 
+        System.out.println(uploadFiles);
         for (MultipartFile uploadFile : uploadFiles) {
 
             File dir = new File(uploadPath);

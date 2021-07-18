@@ -60,7 +60,7 @@
 			<!-- Post -->
 				<article class="post" id="albumList" th:each="item : ${albumList}">
 					<div class="meta" id="rgstUser">
-						<time class="published" th:text="${item.rgstDate}"></time>
+						<span class="name" th:text="${#temporals.format(item.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
 						<a href="#" class="author"><span class="name" th:text="${item.member.nickname}"></span><img src="/images/avatar.jpg" alt="" /></a>
 					</div>
 					<div class="carousel slide" data-bs-ride="carousel" th:id="${'wpCarouse' + itemStat.index}">
@@ -85,13 +85,7 @@
 					</div>
 
 					<p th:text="${item.content}"></p>
-					<div>
-						<form>
-							<input type="hidden" id="itemid" name="itemid" th:value="${item.id}"/>
-							<textarea id="comment" name="comment" rows="1"  action="#"></textarea>
-							<input type="button" class="button-sm" id="rgstBtn" onclick="writeComment(this.form);" value="등록"/>
-						</form>
-					</div>
+
 
 <!--					<div class="card mb-2">
 					<div class="card-header bg-light">
@@ -118,9 +112,49 @@
 						<ul class="stats">
 							<li><a href="#">General</a></li>
 							<li><a href="#" class="icon solid fa-heart" th:text="${item.likeCnt}"></a></li>
-							<li><a href="#" class="icon solid fa-comment" th:text="${item.opnCnt}"></a></li>
+							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
+							<li><a th:href="|javascript:readAlbum('${item.id}');|" class="icon solid fa-comment" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
 						</ul>
+
+						<div class="modal fade" id="veiwAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered modal-lg">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">New message</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+
+										<div class="table-wrapper">
+											<table>
+												<tbody>
+												<tr th:each="com : ${item.comments}">
+													<td th:text="${com.member.nickname}"></td>
+													<td th:text="${com.content}"></td>
+													<td th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+
+
+										<div class="col-12">
+											<form>
+												<div class="col-12">
+													<input type="hidden" id="itemid" name="itemid" th:value="${item.id}"/>
+													<div id="comArea" style="width: 88%;display: inline-grid;">
+														<textarea id="comment" name="comment" rows="1"  action="#"></textarea>
+													</div>
+													<input type="button" class="button-sm" id="rgstBtn" onclick="writeComment(this.form);" value="등록"/>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</footer>
+
 				</article>
 
 			<!-- Post -->
@@ -521,13 +555,11 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 	</div>
 	<script>
 		function writeComment(e){
-			console.log($(e.elements));
 			const comment = e.elements.comment.value;
 			const itemid = e.elements.itemid.value;
 
 			console.log(itemid);
 			console.log(comment);
-			//console.log(($(e).elements);
 
 			$.ajax({
 				url: '/comment/write/' + itemid,
@@ -537,14 +569,18 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				type: 'POST',
 				success: function onData (data) {
 					console.log(data);
+
+
 				},
 				error: function onError (error) {
 					console.error(error);
 				}
 			});
-
 		}
 
+		function readAlbum(itemid){
+			console.log(itemid);
+		}
 	</script>
 </div>
 </html>

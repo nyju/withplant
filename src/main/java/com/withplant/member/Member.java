@@ -1,7 +1,9 @@
 package com.withplant.member;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.withplant.album.Album;
+import com.withplant.comment.Comment;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,4 +40,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Album> albums = new ArrayList<>();
+
+/*    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();*/
+
 }

@@ -28,7 +28,6 @@ public class AttachementConverter {
                 JSONObject obj = (JSONObject) jsonArray.get(i);
 
                 Attachement albumFile = new Attachement();
-                System.out.println("!!!PATH " + obj.get("path"));
                 albumFile.setPath((String) obj.get("path"));
                 albumFile.setFileName((String) obj.get("fileName"));
                 albumFile.setSaveName((String) obj.get("saveName"));

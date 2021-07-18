@@ -1,5 +1,6 @@
 package com.withplant.attachment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.withplant.album.Album;
 import lombok.Getter;
 import lombok.Setter;

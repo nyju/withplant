@@ -24,11 +24,11 @@ public class Album {
     @Column(name = "album_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     @Lob
@@ -47,7 +47,7 @@ public class Album {
     private int status;
 
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Attachement> attachements = new HashSet<>();
 
     public void addAttachement(Attachement attachement) {
