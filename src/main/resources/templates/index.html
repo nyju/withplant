@@ -121,6 +121,7 @@
 							<li><a th:href="|javascript:readAlbum('${item.id}');|" class="icon solid fa-comment" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
 						</ul>
 
+						<!-- 코멘트 모달 -->
 						<div class="modal fade" id="veiwAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-lg-down" id="comModalDiv">
 								<div class="modal-content" >
@@ -134,12 +135,15 @@
 												<tbody>
 												<tr th:each="com : ${item.comments}" >
 													<td th:text="${com.member.nickname}"></td>
-													<td th:text="${com.content}"></td>
+													<td style="width:55%" th:text="${com.content}"></td>
 													<td th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
-													<td th:if="${com.isAuthUser(#authentication.principal)}">del</td>
+													<td th:if="${com.isAuthUser(#authentication.principal)}">
+														<a href="#"><i class="fas fa-pencil-alt"></i></a>
+														<a href="#"><i class="fas fa-trash-alt"></i></a>
+													</td>
 												</tr>
 												</tbody>
-											</table>K
+											</table>
 										</div>
 
 
