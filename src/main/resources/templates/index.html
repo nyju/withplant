@@ -4,6 +4,11 @@
 	  layout:decorator="layout/default">
 
 <div layout:fragment="content">
+ <style media="all">
+	 #comModalDiv {
+		 max-width: 800px;
+	 }
+ </style>
 <!-- Wrapper -->
 <div id="wrapper">
 	<!-- Menu -->
@@ -117,24 +122,24 @@
 						</ul>
 
 						<div class="modal fade" id="veiwAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered modal-lg">
-								<div class="modal-content">
+							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-lg-down" id="comModalDiv">
+								<div class="modal-content" >
 									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLabel">New message</h5>
+										<h5 class="modal-title" id="exampleModalLabel">Comment</h5>
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 									</div>
 									<div class="modal-body">
-
-										<div class="table-wrapper">
+										<div class="table-wrapper" th:fragment="comTable"  id="comTable">
 											<table>
 												<tbody>
-												<tr th:each="com : ${item.comments}">
+												<tr th:each="com : ${item.comments}" >
 													<td th:text="${com.member.nickname}"></td>
 													<td th:text="${com.content}"></td>
 													<td th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
+													<td th:if="${com.isAuthUser(#authentication.principal)}">del</td>
 												</tr>
 												</tbody>
-											</table>
+											</table>K
 										</div>
 
 
@@ -558,19 +563,15 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			const comment = e.elements.comment.value;
 			const itemid = e.elements.itemid.value;
 
-			console.log(itemid);
-			console.log(comment);
-
 			$.ajax({
 				url: '/comment/write/' + itemid,
 				contentType : "application/json; charset=utf-8",
-				dataType: 'json',
-				data : JSON.stringify({'content' : comment}),
+				dataType: 'text',
+				data : JSON.stringify({'content' : comment, itemid : itemid}),
 				type: 'POST',
 				success: function onData (data) {
 					console.log(data);
-
-
+					readAlbum(itemid);
 				},
 				error: function onError (error) {
 					console.error(error);
@@ -579,7 +580,22 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		}
 
 		function readAlbum(itemid){
-			console.log(itemid);
+			$.ajax({
+				url: '/comment/list/' + itemid,
+				contentType : "application/json; charset=utf-8",
+				type: 'GET',
+				success: function onData (data) {
+					console.log(data);
+
+					//$(".comTable").replaceWith(data);
+					$("#comTable").replaceWith(data);
+				},
+				error: function onError (error) {
+					console.error(error);
+				}
+			}).done(function (fragment) {
+				// $(".comTable").replaceWith(fragment);
+			});
 		}
 	</script>
 </div>

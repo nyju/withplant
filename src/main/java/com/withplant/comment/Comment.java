@@ -2,7 +2,9 @@ package com.withplant.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.withplant.album.Album;
+
 import com.withplant.member.Member;
+import com.withplant.member.UserMember;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +35,8 @@ public class Comment {
 
     private String content;
 
-
+    public boolean isAuthUser(UserMember user) {
+        return this.member.getId().equals(user.getMember().getId());
+    }
 
 }
