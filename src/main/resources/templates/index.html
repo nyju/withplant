@@ -92,37 +92,16 @@
 					<p th:text="${item.content}"></p>
 
 
-<!--					<div class="card mb-2">
-					<div class="card-header bg-light">
-						<i class="fa fa-comment fa"></i> REPLY
-					</div>
-					<div class="card-body">
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<div class="form-inline mb-2">
-									<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-									<input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
-									<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-									<input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
-								</div>
-								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-								<button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
-							</li>
-						</ul>
-					</div>
-					</div>-->
-
-
 					<footer>
 						<ul class="stats">
 							<li><a href="#">General</a></li>
 							<li><a href="#" class="icon solid fa-heart" th:text="${item.likeCnt}"></a></li>
-							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
-							<li><a th:href="|javascript:readAlbum('${item.id}');|" class="icon solid fa-comment" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
+							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:data-id="${item.id}" th:text="${item.opnCnt}" th:attrappend="data-bs-target=${item.id}"></a></li>
+							<li><a th:href="|javascript:listComment('${item.id}');|" class="icon solid fa-comment" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
 						</ul>
 
-						<!-- 코멘트 모달 -->
-						<div class="modal fade" id="veiwAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<!-- Comment Modal -->
+						<div class="modal fade" id="veiwAlbumModal" data-refresh="true"  th:attrappend="id=${item.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-lg-down" id="comModalDiv">
 								<div class="modal-content" >
 									<div class="modal-header">
@@ -138,8 +117,8 @@
 													<td style="width:55%" th:text="${com.content}"></td>
 													<td th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
 													<td th:if="${com.isAuthUser(#authentication.principal)}">
-														<a href="#"><i class="fas fa-pencil-alt"></i></a>
-														<a href="#"><i class="fas fa-trash-alt"></i></a>
+														<a href="javascript:updateComment()"><i class="fas fa-pencil-alt"></i></a>
+														<a th:href="|javascript:deleteComment('${com.id}');|" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
 													</td>
 												</tr>
 												</tbody>
@@ -562,11 +541,31 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				</section>
 		</section>
 	</div>
+
 	<script>
+/*
+		function viewComment(id) {
+			$.ajax({
+				url: '/comment/list/' + itemid,
+				contentType : "application/json; charset=utf-8",
+				type: 'GET',
+				success: function onData (data) {
+					console.log(data);
+					$("#comTable").replaceWith(data);
+				},
+				error: function onError (error) {
+					console.error(error);
+				}
+			});
+
+		}*/
+
 		function writeComment(e){
 			const comment = e.elements.comment.value;
 			const itemid = e.elements.itemid.value;
 
+			console.log(comment);
+			console.log(itemid);
 			$.ajax({
 				url: '/comment/write/' + itemid,
 				contentType : "application/json; charset=utf-8",
@@ -575,7 +574,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				type: 'POST',
 				success: function onData (data) {
 					console.log(data);
-					readAlbum(itemid);
+					listComment(itemid);
 				},
 				error: function onError (error) {
 					console.error(error);
@@ -583,22 +582,56 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			});
 		}
 
-		function readAlbum(itemid){
+		function listComment(itemid){
+			console.log(itemid);
 			$.ajax({
 				url: '/comment/list/' + itemid,
 				contentType : "application/json; charset=utf-8",
 				type: 'GET',
 				success: function onData (data) {
 					console.log(data);
-
-					//$(".comTable").replaceWith(data);
 					$("#comTable").replaceWith(data);
 				},
 				error: function onError (error) {
 					console.error(error);
 				}
-			}).done(function (fragment) {
-				// $(".comTable").replaceWith(fragment);
+			});
+		}
+
+		function deleteComment(itemid){
+			console.log(itemid);
+			/*$.ajax({
+				url: '/comment/delete/' + itemid,
+				contentType : "application/json; charset=utf-8",
+				data : JSON.stringify({'itemid' : itemid}),
+				type: 'POST',
+				success: function onData (data) {
+					console.log(data);
+					listComment(itemid);
+				},
+				error: function onError (error) {
+					console.error(error);
+				}
+			});*/
+		}
+
+		function updateComment(e){
+			const comment = e.elements.comment.value;
+			const itemid = e.elements.itemid.value;
+
+			$.ajax({
+				url: '/comment/update/' + itemid,
+				contentType : "application/json; charset=utf-8",
+				dataType: 'text',
+				data : JSON.stringify({'content' : comment, itemid : itemid}),
+				type: 'POST',
+				success: function onData (data) {
+					console.log(data);
+					listComment(itemid);
+				},
+				error: function onError (error) {
+					console.error(error);
+				}
 			});
 		}
 	</script>
