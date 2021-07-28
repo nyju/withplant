@@ -109,15 +109,16 @@
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 									</div>
 									<div class="modal-body">
-										<div class="table-wrapper" th:fragment="comTable"  id="comTable">
+										<div class="table-wrapper" th:fragment="comTable" id="comTable">
 											<table>
 												<tbody>
-												<tr th:each="com : ${item.comments}" >
-													<td th:text="${com.member.nickname}"></td>
-													<td style="width:55%" th:text="${com.content}"></td>
-													<td th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
+												<tr th:each="com : ${item.comments}"  id="com" th:attrappend="id=${com.id}">
+													<td id="comNickname" th:text="${com.member.nickname}"></td>
+													<td id="comContent" style="width:55%" th:text="${com.content}">
+													</td>
+													<td id="comrgstDate" th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
 													<td th:if="${com.isAuthUser(#authentication.principal)}">
-														<a href="javascript:updateComment()"><i class="fas fa-pencil-alt"></i></a>
+														<a th:href="|javascript:updateComment('${com.id}', '${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
 														<a th:href="|javascript:deleteComment('${com.id}');|" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
 													</td>
 												</tr>
@@ -590,7 +591,8 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				type: 'GET',
 				success: function onData (data) {
 					console.log(data);
-					$("#comTable").replaceWith(data);
+					//$("#comTable").replaceWith(data);
+					$("#veiwAlbumModal" +itemid ).find("#comTable").replaceWith(data);
 				},
 				error: function onError (error) {
 					console.error(error);
@@ -615,8 +617,11 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			});*/
 		}
 
-		function updateComment(e){
-			const comment = e.elements.comment.value;
+		function updateComment(comid, itemid){
+			console.log(comid);
+			console.log(itemid);
+
+			/*const comment = e.elements.comment.value;
 			const itemid = e.elements.itemid.value;
 
 			$.ajax({
@@ -632,7 +637,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				error: function onError (error) {
 					console.error(error);
 				}
-			});
+			});*/
 		}
 	</script>
 </div>
