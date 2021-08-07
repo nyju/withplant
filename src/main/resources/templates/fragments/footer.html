@@ -27,6 +27,13 @@
                 xhr.setRequestHeader(csrfHeader, csrfToken);
             });
         });
+
+       $('.modal').on('hidden.bs.modal', function (e) {
+            console.log('modal close');
+            $(this).removeData();
+            $(this).find('form')[0].reset();
+        });
+
     </script>
 </footer>
 </html>

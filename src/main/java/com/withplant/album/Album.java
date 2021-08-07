@@ -54,4 +54,11 @@ public class Album {
         attachement.setAlbum(this);
     }
 
+    public void addOpnCnt() {
+        this.opnCnt += 1;
+    }
+
+    public void deleteOpnCnt() {
+        this.opnCnt -= 1;
+    }
 }

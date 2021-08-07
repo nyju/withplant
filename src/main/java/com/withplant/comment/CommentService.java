@@ -29,6 +29,8 @@ public class CommentService {
 
         Optional<Album> album = albumRepository.findById(itemId);
         comment.setAlbum(album.get());
+        album.get().addOpnCnt();
+
 
         commentRepository.save(comment);
 
@@ -47,4 +49,10 @@ public class CommentService {
     }
 
 
+    public void deletecomment(Long itemId, Long commentId) {
+        commentRepository.deleteById(commentId);
+        Optional<Album> album = albumRepository.findById(itemId);
+        album.get().deleteOpnCnt();
+
+    }
 }

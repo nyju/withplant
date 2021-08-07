@@ -112,14 +112,14 @@
 										<div class="table-wrapper" th:fragment="comTable" id="comTable">
 											<table>
 												<tbody>
-												<tr th:each="com : ${item.comments}"  id="com" th:attrappend="id=${com.id}">
+												<tr th:each="com : ${item.comments}" >
 													<td id="comNickname" th:text="${com.member.nickname}"></td>
 													<td id="comContent" style="width:55%" th:text="${com.content}">
 													</td>
 													<td id="comrgstDate" th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
 													<td th:if="${com.isAuthUser(#authentication.principal)}">
 														<a th:href="|javascript:updateComment('${com.id}', '${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
-														<a th:href="|javascript:deleteComment('${com.id}');|" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
+														<a th:href="|javascript:deleteComment('${com.id}', '${com.album.id}');|" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
 													</td>
 												</tr>
 												</tbody>
@@ -600,10 +600,13 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			});
 		}
 
-		function deleteComment(itemid){
+		function deleteComment(commentid, itemid){
 			console.log(itemid);
-			/*$.ajax({
-				url: '/comment/delete/' + itemid,
+
+			//var itemid= commentid;
+			console.log(commentid);
+			$.ajax({
+				url: '/comment/delete/' + itemid + '/' + commentid,
 				contentType : "application/json; charset=utf-8",
 				data : JSON.stringify({'itemid' : itemid}),
 				type: 'POST',
@@ -614,7 +617,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				error: function onError (error) {
 					console.error(error);
 				}
-			});*/
+			});
 		}
 
 		function updateComment(comid, itemid){

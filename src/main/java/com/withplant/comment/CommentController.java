@@ -41,6 +41,15 @@ public class CommentController {
 
        // return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
 
-        return "index :: comTable";
+        return "modal :: comTable";
+    }
+
+    //DELETE
+    @RequestMapping(value= "/delete/{itemId}/{commentId}", method = {RequestMethod.POST})
+    public ResponseEntity<List<Comment>> addComment(@AuthUser Member member, @PathVariable Long itemId, @PathVariable Long commentId) {
+        commentService.deletecomment(itemId, commentId);
+       // return new ResponseEntity<>(this.commentService.Deletecomments(commentsNo,postNo),HttpStatus.CREATED);
+
+        return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
     }
 }

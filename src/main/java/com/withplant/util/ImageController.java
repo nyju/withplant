@@ -27,7 +27,6 @@ public class ImageController {
         FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        //String fileDir = path; // 파일경로
         String fileDir = Paths.get(repository, path).toString();
 
         try {
