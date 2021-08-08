@@ -8,6 +8,7 @@
 	 #comModalDiv {
 		 max-width: 800px;
 	 }
+	 #comContent{width:55%;}
  </style>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -111,10 +112,10 @@
 									<div class="modal-body">
 										<div class="table-wrapper" th:fragment="comTable" id="comTable">
 											<table>
-												<tbody>
+												<tbody id="comTableTbody">
 												<tr th:each="com : ${item.comments}" >
 													<td id="comNickname" th:text="${com.member.nickname}"></td>
-													<td id="comContent" style="width:55%" th:text="${com.content}">
+													<td id="comContent" th:text="${com.content}">
 													</td>
 													<td id="comrgstDate" th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
 													<td th:if="${com.isAuthUser(#authentication.principal)}">
@@ -544,22 +545,26 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 	</div>
 
 	<script>
-/*
-		function viewComment(id) {
-			$.ajax({
-				url: '/comment/list/' + itemid,
-				contentType : "application/json; charset=utf-8",
-				type: 'GET',
-				success: function onData (data) {
-					console.log(data);
-					$("#comTable").replaceWith(data);
-				},
-				error: function onError (error) {
-					console.error(error);
-				}
-			});
 
-		}*/
+
+		function drawComment(array, itemid) {
+			var commentsHtml = "";
+			$(array).each(function (idx, com) {
+				var itemId = itemid;
+				commentsHtml +=
+						`<tr>
+							<td id="comNickname">${com.member.nickname}</td>
+							<td id="comContent">${com.content}</td>
+							<td id="comrgstDate" >${moment(com.rgstDate).format('YYYY-MM-DD HH:mm')}</td>
+							<td>
+								<a href="javascript:updateComment('${com.id}', '${itemId}');"><i class="fas fa-pencil-alt"></i></a>
+								<a href="javascript:deleteComment('${com.id}', '${itemId}');" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
+							</td>
+						</tr>`;
+			});
+			$("#veiwAlbumModal" + itemid).find("#comTableTbody").html(commentsHtml);
+
+		}
 
 		function writeComment(e){
 			const comment = e.elements.comment.value;
@@ -574,8 +579,9 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				data : JSON.stringify({'content' : comment, itemid : itemid}),
 				type: 'POST',
 				success: function onData (data) {
-					console.log(data);
-					listComment(itemid);
+					console.log(JSON.parse(data));
+					drawComment(JSON.parse(data), itemid);
+					//listComment(itemid);
 				},
 				error: function onError (error) {
 					console.error(error);
@@ -583,28 +589,33 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			});
 		}
 
-		function listComment(itemid){
-			console.log(itemid);
-			$.ajax({
-				url: '/comment/list/' + itemid,
-				contentType : "application/json; charset=utf-8",
-				type: 'GET',
-				success: function onData (data) {
-					console.log(data);
-					//$("#comTable").replaceWith(data);
-					$("#veiwAlbumModal" +itemid ).find("#comTable").replaceWith(data);
-				},
-				error: function onError (error) {
-					console.error(error);
-				}
-			});
+		function listComment(itemid) {
+
+			var uri = '/comment/list/' + itemid;
+			$.get(uri, function (response) {
+				var commentsHtml = "";
+				$(response).each(function (idx, com) {
+					var itemId = itemid;
+					console.log(com);
+					commentsHtml +=
+							`<tr>
+							<td id="comNickname">${com.member.nickname}</td>
+							<td id="comContent">${com.content}</td>
+							<td id="comrgstDate">${com.rgstDate}</td>
+							<td>
+								<a href="javascript:updateComment('${com.id}', '${itemId}');"><i class="fas fa-pencil-alt"></i></a>
+								<a href="javascript:deleteComment('${com.id}', '${itemId}');" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
+							</td>
+						</tr>`;
+				});
+				$("#veiwAlbumModal" + itemid).find("#comTableTbody").html(commentsHtml);
+
+			}, "json");
+
 		}
 
 		function deleteComment(commentid, itemid){
-			console.log(itemid);
-
-			//var itemid= commentid;
-			console.log(commentid);
+			console.log("deleteComment " + commentid);
 			$.ajax({
 				url: '/comment/delete/' + itemid + '/' + commentid,
 				contentType : "application/json; charset=utf-8",
@@ -612,7 +623,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				type: 'POST',
 				success: function onData (data) {
 					console.log(data);
-					listComment(itemid);
+					drawComment(data, itemid);
 				},
 				error: function onError (error) {
 					console.error(error);

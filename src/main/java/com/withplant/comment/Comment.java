@@ -2,7 +2,6 @@ package com.withplant.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.withplant.album.Album;
-
 import com.withplant.member.Member;
 import com.withplant.member.UserMember;
 import lombok.Getter;
@@ -21,12 +20,11 @@ public class Comment {
     @Column(name = "comt_id")
     private Long id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "album_id")
+    @JsonIgnore
     private Album album;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;

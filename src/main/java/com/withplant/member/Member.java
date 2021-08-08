@@ -1,9 +1,8 @@
 package com.withplant.member;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.withplant.album.Album;
-import com.withplant.comment.Comment;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = {"password", "email", "joinDate", "albums"})
 public class Member {
 
     @Id

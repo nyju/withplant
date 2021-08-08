@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -20,35 +19,38 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @ResponseBody
-    @RequestMapping(value= "/write/{itemId}", method = {RequestMethod.POST})
-    public ResponseEntity<List<Comment>> writeComment(@AuthUser Member member, Model model, @PathVariable Long itemId, @RequestBody CommentForm commentForm) {
+    // CREATE
+    @PostMapping("/write/{itemId}")
+    public ResponseEntity<List<Comment>> writeComment(@AuthUser Member member, @PathVariable Long itemId, @RequestBody CommentForm commentForm) {
         commentService.saveComment(member, commentForm, itemId);
 
         return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
     }
 
     // READ
-   // @ResponseBody
-    @RequestMapping(value= "/list/{itemId}", method = {RequestMethod.GET})
-    public String addComment(@PathVariable Long itemId, Model model) {
-
+    @RequestMapping(value = "/list/{itemId}", method = {RequestMethod.GET})
+    public ResponseEntity<List<Comment>> listComment(@PathVariable Long itemId, Model model) {
         Album item = new Album();
         item.setComments(commentService.Listcomment(itemId));
 
         model.addAttribute("item", item);
-        //model.addAttribute("item.comments", commentService.Listcomment(itemId));
 
-       // return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
 
-        return "modal :: comTable";
+       // return "modal :: comTable";
+    }
+
+    //UPDATE
+    @PutMapping("/update/{itemId}/{commentId}")
+    public ResponseEntity<List<Comment>> modifyComment(@AuthUser Member member, @PathVariable Long itemId, @PathVariable Long commentId) {
+
+        return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
     }
 
     //DELETE
-    @RequestMapping(value= "/delete/{itemId}/{commentId}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/delete/{itemId}/{commentId}", method = {RequestMethod.POST})
     public ResponseEntity<List<Comment>> addComment(@AuthUser Member member, @PathVariable Long itemId, @PathVariable Long commentId) {
         commentService.deletecomment(itemId, commentId);
-       // return new ResponseEntity<>(this.commentService.Deletecomments(commentsNo,postNo),HttpStatus.CREATED);
 
         return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
     }
