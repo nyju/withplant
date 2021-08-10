@@ -544,23 +544,32 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		</section>
 	</div>
 
-	<script>
-
-
+	<script th:inline="javascript">
 		function drawComment(array, itemid) {
 			var commentsHtml = "";
 			$(array).each(function (idx, com) {
+
+				/*<![CDATA[*/
+					var userid= [[${#authentication.principal.member.id}]];
+				/*]]>*/
+
 				var itemId = itemid;
 				commentsHtml +=
 						`<tr>
 							<td id="comNickname">${com.member.nickname}</td>
 							<td id="comContent">${com.content}</td>
-							<td id="comrgstDate" >${moment(com.rgstDate).format('YYYY-MM-DD HH:mm')}</td>
-							<td>
-								<a href="javascript:updateComment('${com.id}', '${itemId}');"><i class="fas fa-pencil-alt"></i></a>
-								<a href="javascript:deleteComment('${com.id}', '${itemId}');" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
-							</td>
-						</tr>`;
+							<td id="comrgstDate" >${moment(com.rgstDate).format('YYYY-MM-DD HH:mm')}</td>`;
+				if(com.member.id == userid){
+					commentsHtml +=
+									`<td><a href="javascript:updateComment('${com.id}', '${itemId}');"><i class="fas fa-pencil-alt"></i></a>
+									<a href="javascript:deleteComment('${com.id}', '${itemId}');" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
+								</td>`;
+				}
+				else{
+					commentsHtml += '<td></td>';
+				}
+				commentsHtml +='</tr>';
+
 			});
 			$("#veiwAlbumModal" + itemid).find("#comTableTbody").html(commentsHtml);
 
@@ -581,6 +590,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 				success: function onData (data) {
 					console.log(JSON.parse(data));
 					drawComment(JSON.parse(data), itemid);
+					e.elements.comment.value='';
 					//listComment(itemid);
 				},
 				error: function onError (error) {
@@ -590,7 +600,6 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		}
 
 		function listComment(itemid) {
-
 			var uri = '/comment/list/' + itemid;
 			$.get(uri, function (response) {
 				var commentsHtml = "";
