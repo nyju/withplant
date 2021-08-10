@@ -21,7 +21,7 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin(); //x-frame-options 동일 출처일경우만
 
         http.authorizeRequests()
-                .mvcMatchers("/", "/login", "/sign-up","/h2-console/*", "/h2-console").permitAll() // 전체 접근 허용
+                .mvcMatchers("/", "/login", "/sign-up","/h2-console/*", "/h2-console", "/image/view").permitAll() // 전체 접근 허용
                 .anyRequest().authenticated();
 
         http.formLogin() // 커스텀한 로그인페이지 URL. 설정하지 않으면 시큐리티기본 로그인페이지가 보임

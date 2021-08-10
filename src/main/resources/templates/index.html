@@ -95,10 +95,8 @@
 
 					<footer>
 						<ul class="stats">
-							<li><a href="#">General</a></li>
-							<li><a href="#" class="icon solid fa-heart" th:text="${item.likeCnt}"></a></li>
-							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:data-id="${item.id}" th:text="${item.opnCnt}" th:attrappend="data-bs-target=${item.id}"></a></li>
-							<li><a th:href="|javascript:listComment('${item.id}');|" class="icon solid fa-comment" data-bs-toggle="modal" th:text="${item.opnCnt}"></a></li>
+							<li><a class="icon solid fa-heart" th:text="${item.likeCnt}" th:data-id="${item.id}" th:attrappend="data-bs-target=${item.id}"></a></li>
+							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:text="${item.opnCnt}" th:data-id="${item.id}" th:attrappend="data-bs-target=${item.id}"></a></li>
 						</ul>
 
 						<!-- Comment Modal -->
