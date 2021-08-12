@@ -5,10 +5,6 @@
 
 <div layout:fragment="content">
  <style media="all">
-	 #comModalDiv {
-		 max-width: 800px;
-	 }
-	 #comContent{width:55%;}
  </style>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -65,10 +61,21 @@
 		<div id="main">
 			<!-- Post -->
 				<article class="post" id="albumList" th:each="item : ${albumList}">
+
 					<div class="meta" id="rgstUser">
-						<span class="name" th:text="${#temporals.format(item.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
-						<a href="#" class="author"><span class="name" th:text="${item.member.nickname}"></span><img src="/images/avatar.jpg" alt="" /></a>
+
+						<div class="wpHeader">
+							<span class="name" id="wpRgstDate" th:text="${#temporals.format(item.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
+							<div id="albumBtn">
+								<span id="albumBtnSpan";>
+									<a th:href="|javascript:updateComment('${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
+									<a th:href="|javascript:deleteComment('${item.id}');|" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
+								</span>
+							</div>
+						</div>
+						<a href="#" class="author"><img id="rgstUserImg" src="/images/avatar.jpg" alt="" /><span class="name" th:text="${item.member.nickname}"></span></a>
 					</div>
+
 					<div class="carousel slide" data-bs-ride="carousel" th:id="${'wpCarouse' + itemStat.index}">
 						<div class="carousel-indicators" >
 							<button type="button" th:if="${attStat.index == 0 }"   th:each="att : ${item.attachements}" th:data-bs-target="${'#wpCarouse' + itemStat.index}" th:data-bs-slide-to="${attStat.index}" aria-current="true" class="active"></button>
@@ -80,17 +87,18 @@
 								<img th:src="${'/image/view?path=' + att.path}" alt="" class="d-block w-100"/>
 							</div>
 						</div>
-						<button class="carousel-control-prev" type="button" th:data-bs-target="${'#wpCarouse' + itemStat.index}" data-bs-slide="prev">
+
+						<button th:if="${item.attachements.size() > 1}" class="carousel-control-prev" type="button" th:data-bs-target="${'#wpCarouse' + itemStat.index}" data-bs-slide="prev">
 							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 							<span class="visually-hidden">Previous</span>
 						</button>
-						<button class="carousel-control-next" type="button" th:data-bs-target="${'#wpCarouse' + itemStat.index}" data-bs-slide="next">
+						<button th:if="${item.attachements.size() > 1}" class="carousel-control-next" type="button" th:data-bs-target="${'#wpCarouse' + itemStat.index}" data-bs-slide="next">
 							<span class="carousel-control-next-icon" aria-hidden="true"></span>
 							<span class="visually-hidden">Next</span>
 						</button>
 					</div>
 
-					<p th:text="${item.content}"></p>
+					<p id="wpComment" th:text="${item.content}"></p>
 
 
 					<footer>
@@ -98,6 +106,7 @@
 							<li><a class="icon solid fa-heart" th:text="${item.likeCnt}" th:data-id="${item.id}" th:attrappend="data-bs-target=${item.id}"></a></li>
 							<li><a class="icon solid fa-comment" data-bs-target="#veiwAlbumModal" data-bs-toggle="modal" th:text="${item.opnCnt}" th:data-id="${item.id}" th:attrappend="data-bs-target=${item.id}"></a></li>
 						</ul>
+
 
 						<!-- Comment Modal -->
 						<div class="modal fade" id="veiwAlbumModal" data-refresh="true"  th:attrappend="id=${item.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
