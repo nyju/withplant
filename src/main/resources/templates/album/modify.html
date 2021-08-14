@@ -125,6 +125,11 @@
 
                     console.log(item);
                     console.log(obj);
+
+                    for (var i = 0; i < item.length; i++) {
+                        obj.createProgress(item[i]["fileName"], item[i]["path"], item[i]["size"]);
+                    }
+
                 }
             });
 

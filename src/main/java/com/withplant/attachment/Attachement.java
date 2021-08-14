@@ -31,6 +31,7 @@ public class Attachement {
 
     @ManyToOne
     @JoinColumn(name = "album_id")
+    @JsonIgnore
     private Album album;
 
 
