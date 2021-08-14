@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<div layout:fragment="content">
+    <link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://hayageek.github.io/jQuery-Upload-File/4.0.11/jquery.uploadfile.min.js"></script>
+
+    <style>
+        #upload-file, #upload-file2 {
+            display: none;
+        }
+        .ajax-upload-dragdrop {
+            width:100% !important;
+        }
+        .ajax-file-upload-statusbar {
+            width: 100% !important;
+        }
+        .ajax-file-upload {
+            background-color: transparent;
+            border: 0;
+            box-shadow: inset 0 0 0 1px rgb(160 160 160 / 30%);
+            color: #3c3b3b !important;
+            cursor: pointer !important;
+            display: inline-block;
+            font-family: "Raleway", Helvetica, sans-serif;
+            font-size: 0.6em;
+            font-weight: 800;
+            height: 4.8125em;
+            letter-spacing: 0.25em;
+            line-height: 4.8125em;
+            padding: 0 2.5em;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .ajax-file-upload:hover {
+            background-color: transparent;
+            box-shadow: inset 0 0 0 1px #2ebaae;
+            color: #2ebaae !important;
+        }
+        .ajax-file-upload-statusbar {
+            border: solid 1px rgba(160, 160, 160, 0.3);
+            margin: 10px 0 0 0;
+            padding: 15px 5px 10px 15px;
+        }
+    </style>
+    <div id="wrapper">
+        <div id="main">
+            <article class="post">
+                <section>
+                    <h3>GARDEN</h3>
+                    <form class="needs-validation" method="post" th:action="@{/regeister}" th:object="${albumForm}" id="albumForm" novalidate>
+                        <div class="row gtr-uniform">
+                            <div class="col-12">
+                                <div id="fileuploader">Upload</div>
+                                <input type="hidden" name="attachements" id="attachements"/>
+                            </div>
+                            <div class="col-12">
+                                <textarea name="content" id="content" placeholder="내용"
+                                          rows="6" th:text="${item.content}"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <ul class="actions">
+                                    <li><input type="button" id="rgstBtn" value="등록"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </article>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function()
+        {
+            var fileuploader =  $("#fileuploader").uploadFile({
+                url:"/upload",
+                fileName:'uploadFile',
+                multiple:true,
+                dragDrop:true,
+                showDelete: true,
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                autoSubmit : false,
+                afterUploadAll: function(obj)
+                {
+                    console.log("afterUploadAll");
+                    console.log(obj);
+                    var form  = $("#albumForm");
+                    var result = new Array();
+                    for(var i= 0; i<obj.responses.length; i++){
+                        console.log(obj.responses[i]);
+
+                        var att = JSON.parse(obj.responses[i])[0];
+                        console.log(att);
+                        console.log("path :" + att.path);
+                        var tmp =new Object();
+                        tmp.path =  att.path;
+                        tmp.saveName =  att.saveName;
+                        tmp.fileName =  att.fileName;
+                        result.push(tmp);
+                    }
+
+                    var re = new Object();
+                    re.attachements = JSON.stringify(result);
+                    $("#attachements").val(JSON.stringify(result));
+
+                    var data3 = form.serializeArray();
+                    console.log(data3);
+
+                   $("#albumForm").submit();
+
+                },
+                onLoad:function(obj)
+                {
+                    /*<![CDATA[*/
+                         var item = /*[[${item.attachements}]]*/  null;
+                    /*]]>*/
+
+                    console.log(item);
+                    console.log(obj);
+                }
+            });
+
+            $("#rgstBtn").click(function()
+            {
+                fileuploader.startUpload();
+            });
+        });
+
+    </script>
+</div>
+</html>

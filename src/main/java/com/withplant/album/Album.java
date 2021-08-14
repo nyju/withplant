@@ -3,6 +3,7 @@ package com.withplant.album;
 import com.withplant.attachment.Attachement;
 import com.withplant.comment.Comment;
 import com.withplant.member.Member;
+import com.withplant.member.UserMember;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -24,7 +25,7 @@ public class Album {
     @Column(name = "album_id")
     private Long id;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -60,5 +61,9 @@ public class Album {
 
     public void deleteOpnCnt() {
         this.opnCnt -= 1;
+    }
+
+    public boolean isAuthUser(UserMember user) {
+        return this.member.getId().equals(user.getMember().getId());
     }
 }

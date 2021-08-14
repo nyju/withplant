@@ -61,15 +61,13 @@
 		<div id="main">
 			<!-- Post -->
 				<article class="post" id="albumList" th:each="item : ${albumList}">
-
 					<div class="meta" id="rgstUser">
-
 						<div class="wpHeader">
 							<span class="name" id="wpRgstDate" th:text="${#temporals.format(item.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
 							<div id="albumBtn">
-								<span id="albumBtnSpan";>
-									<a th:href="|javascript:updateComment('${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
-									<a th:href="|javascript:deleteComment('${item.id}');|" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
+								<span th:if="${item.isAuthUser(#authentication.principal)}" id="albumBtnSpan";>
+									<a th:href="@{'/album/modify/' + ${item.id}}"><i class="fas fa-pencil-alt"></i></a>
+									<a  th:href="@{'/album/delete/' + ${item.id}}" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
 								</span>
 							</div>
 						</div>
