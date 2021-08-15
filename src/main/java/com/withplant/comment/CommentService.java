@@ -43,9 +43,7 @@ public class CommentService {
 
         Optional<Album> album = albumRepository.findById(itemId);
         List<Comment> comments = commentRepository.findAllByAlbum(album);
-        System.out.println(comments);
         return comments;
-        //return this.CMR.getCommentsOfPost(postNo);
     }
 
 

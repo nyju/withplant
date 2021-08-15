@@ -3,7 +3,6 @@ package com.withplant.album;
 import com.withplant.attachment.Attachement;
 import com.withplant.member.Member;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,7 +42,22 @@ public class AlbumService {
         AlbumForm albumForm = new AlbumForm();
         albumForm.setContent(album.getContent());
         albumForm.setAttachements(album.getAttachements());
+        albumForm.setId(album.getId());
 
         return albumForm;
+    }
+
+    public void updateAlbum(Long itemid, AlbumForm albumForm) {
+        Optional<Album> albumWrapper = repository.findById(itemid);
+        Album album = albumWrapper.get();
+
+        repository.deleteAllAttachmentById(itemid);
+
+        album.setAttachements(albumForm.getAttachements());
+
+        for (Attachement att : albumForm.getAttachements()) {
+            album.addAttachement(att);
+        }
+
     }
 }

@@ -13,14 +13,9 @@ import java.util.Set;
 public class AlbumForm {
 
     private static final long serialVersionUID = 1L;
+
+    Long id;
     String content;
     Set<Attachement> attachements;
 
-/*    @Getter
-    @Setter
-    public static class AlbumFile {
-        private String fileName;
-        private String saveName;
-        private String path;
-    }*/
 }

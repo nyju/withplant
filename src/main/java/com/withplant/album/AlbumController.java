@@ -1,7 +1,5 @@
 package com.withplant.album;
 
-import com.withplant.attachment.Attachement;
-import com.withplant.comment.CommentService;
 import com.withplant.member.AuthUser;
 import com.withplant.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,6 +40,14 @@ public class AlbumController {
         model.addAttribute("item", albumForm);
 
         return "album/modify";
+    }
+
+    @PostMapping("/album/modify/{itemid}")
+    public String modifyAlbumSubmit(@AuthUser Member member, @PathVariable Long itemid, AlbumForm albumForm) {
+
+        albumService.updateAlbum(itemid, albumForm);
+
+        return "redirect:/";
     }
 
     @GetMapping("/album/delete/{itemid}")

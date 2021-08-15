@@ -1,6 +1,8 @@
 package com.withplant.album;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -9,4 +11,8 @@ import java.util.List;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     List<Album> findByMemberId(Long id);
+
+    @Modifying
+    @Query("DELETE FROM Attachement WHERE album_id = ?1")
+    void deleteAllAttachmentById(Long id);
 }
