@@ -42,7 +42,9 @@ public class CommentController {
 
     //UPDATE
     @PutMapping("/update/{itemId}/{commentId}")
-    public ResponseEntity<List<Comment>> modifyComment(@AuthUser Member member, @PathVariable Long itemId, @PathVariable Long commentId) {
+    public ResponseEntity<List<Comment>> modifyComment(@AuthUser Member member, @PathVariable Long itemId, @PathVariable Long commentId, @RequestBody CommentForm commentForm) {
+
+        commentService.updateComment(member, commentForm, itemId, commentId);
 
         return new ResponseEntity<>(commentService.Listcomment(itemId), HttpStatus.CREATED);
     }

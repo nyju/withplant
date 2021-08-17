@@ -39,10 +39,8 @@ public class CommentService {
     //댓글 리스트
     @Transactional(readOnly = true)
     public List<Comment> Listcomment(Long itemId) {
-        System.out.println("ListComment");
-
-        Optional<Album> album = albumRepository.findById(itemId);
-        List<Comment> comments = commentRepository.findAllByAlbum(album);
+        // Optional<Album> album = albumRepository.findById(itemId);
+        List<Comment> comments = commentRepository.findAllByAlbumId(itemId);
         return comments;
     }
 
@@ -51,6 +49,19 @@ public class CommentService {
         commentRepository.deleteById(commentId);
         Optional<Album> album = albumRepository.findById(itemId);
         album.get().deleteOpnCnt();
+
+    }
+
+    public List<Comment> updateComment(Member member, CommentForm client, Long itemId, Long commentId) {
+        Optional<Comment> server = commentRepository.findById(commentId);
+
+        server.ifPresent(a -> {
+            a.setContent(client.getContent());
+            commentRepository.save(a);
+        });
+
+        List<Comment> comments = commentRepository.findAllByAlbumId(itemId);
+        return comments;
 
     }
 }
