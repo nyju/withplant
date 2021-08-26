@@ -1,5 +1,6 @@
 package com.withplant.member;
 
+import com.withplant.config.auth.OAuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,13 +32,15 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(email);
 
-        if (member == null) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        Member mem = member.get();
+
+        if (mem == null) {
             System.out.println("UsernameNotFount");
             throw new UsernameNotFoundException(email);
         }
 
-        return new UserMember(member);
+        return new OAuthUser(mem);
     }
 }

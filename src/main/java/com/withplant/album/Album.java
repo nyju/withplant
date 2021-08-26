@@ -2,6 +2,7 @@ package com.withplant.album;
 
 import com.withplant.attachment.Attachement;
 import com.withplant.comment.Comment;
+import com.withplant.config.auth.OAuthUser;
 import com.withplant.member.Member;
 import com.withplant.member.UserMember;
 import lombok.Getter;
@@ -66,4 +67,9 @@ public class Album {
     public boolean isAuthUser(UserMember user) {
         return this.member.getId().equals(user.getMember().getId());
     }
+
+    public boolean isAuthUser(OAuthUser user) {
+        return this.member.getId().equals(user.getMember().getId());
+    }
+
 }

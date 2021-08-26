@@ -41,6 +41,28 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Album> albums = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+
+    @Builder
+    public Member(String name, String email, String password, Role role) {
+        this.nickname = name;
+        this.email = email;
+        this.joinDate = LocalDateTime.now();
+        this.password = password;
+        this.role = role;
+    }
+
+    public Member update(String name, String picture) {
+        this.nickname = name;
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 /*    @JsonIgnore
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();*/

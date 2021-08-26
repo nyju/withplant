@@ -1,6 +1,7 @@
 package com.withplant.config;
 
 
+import com.withplant.config.auth.CustomOAuth2UserService;
 import com.withplant.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity // 스프링 시큐리티 사용을 위한 선언
 @RequiredArgsConstructor
 public class SecutiryConfig extends WebSecurityConfigurerAdapter {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,6 +34,8 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().ignoringAntMatchers("/h2-console/**");
        // http.csrf().disable(); //CSRF Token 비활성화
+
+        http.oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);
 
     }
 
