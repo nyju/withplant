@@ -2,10 +2,11 @@ package com.withplant.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.withplant.album.Album;
+import com.withplant.member.auth.OAuthUser;
 import com.withplant.member.Member;
-import com.withplant.member.UserMember;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,8 +34,13 @@ public class Comment {
 
     private String content;
 
-    public boolean isAuthUser(UserMember user) {
-        return this.member.getId().equals(user.getMember().getId());
+    public boolean isAuthUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!principal.equals("anonymousUser")) {
+            OAuthUser user = (OAuthUser) principal;
+            return this.member.getId().equals(user.getMember().getId());
+        }
+        return false;
     }
 
 }

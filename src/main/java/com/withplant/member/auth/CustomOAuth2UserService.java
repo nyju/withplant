@@ -1,4 +1,5 @@
-package com.withplant.config.auth;
+package com.withplant.member.auth;
+
 
 import com.withplant.member.Member;
 import com.withplant.member.MemberRepository;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
 
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
@@ -22,9 +23,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("OauthService 1");
-        OAuth2UserService delegate = new DefaultOAuth2UserService();
-        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // 현재 로그인 진행 중인 서비스를 구분하는 코드
         // 이후에 여러가지 추가할 때 네이버인지 구글인지 구분
@@ -35,8 +34,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
 
-        OAuthAttributes attributes = OAuthAttributes.
-                of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         Member member = saveOrUpdate(attributes);
 
@@ -44,11 +42,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         System.out.println(member.getPassword());
 
         return new OAuthUser(member,  attributes.getAttributes());
-/*
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getRoleKey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());*/
     }
 
     private Member saveOrUpdate(OAuthAttributes attributes) {
@@ -56,7 +49,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         .map(entity -> entity.update(attributes.getName(),attributes.getPicture()))
                 .orElse(attributes.toEntity());
         member.setPassword("password");
-    //member.setNickname(attributes.getName());
 
         return memberRepository.save(member);
     }

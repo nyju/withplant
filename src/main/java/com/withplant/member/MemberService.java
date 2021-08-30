@@ -1,6 +1,6 @@
 package com.withplant.member;
 
-import com.withplant.config.auth.OAuthUser;
+import com.withplant.member.auth.OAuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,7 +37,6 @@ public class MemberService implements UserDetailsService {
         Member mem = member.get();
 
         if (mem == null) {
-            System.out.println("UsernameNotFount");
             throw new UsernameNotFoundException(email);
         }
 

@@ -1,4 +1,4 @@
-package com.withplant.config.auth;
+package com.withplant.member.auth;
 
 
 import com.withplant.member.Member;

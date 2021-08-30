@@ -65,7 +65,7 @@
 						<div class="wpHeader">
 							<span class="name" id="wpRgstDate" th:text="${#temporals.format(item.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
 							<div id="albumBtn">
-								<span th:if="${item.isAuthUser(#authentication.principal)}" id="albumBtnSpan";>
+								<span th:if="${item.isAuthUser()}" id="albumBtnSpan">
 									<a th:href="@{'/album/modify/' + ${item.id}}"><i class="fas fa-pencil-alt"></i></a>
 									<a  th:href="@{'/album/delete/' + ${item.id}}" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
 								</span>
@@ -123,7 +123,7 @@
 													<td id="comContent" th:text="${com.content}">
 													</td>
 													<td id="comrgstDate" th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
-													<td th:if="${com.isAuthUser(#authentication.principal)}">
+													<td th:if="${com.isAuthUser()}">
 														<a th:href="|javascript:updateComment('${com.id}', '${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
 														<a th:href="|javascript:deleteComment('${com.id}', '${com.album.id}');|" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
 													</td>

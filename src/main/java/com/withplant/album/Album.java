@@ -2,12 +2,12 @@ package com.withplant.album;
 
 import com.withplant.attachment.Attachement;
 import com.withplant.comment.Comment;
-import com.withplant.config.auth.OAuthUser;
+import com.withplant.member.auth.OAuthUser;
 import com.withplant.member.Member;
-import com.withplant.member.UserMember;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -64,12 +64,13 @@ public class Album {
         this.opnCnt -= 1;
     }
 
-    public boolean isAuthUser(UserMember user) {
-        return this.member.getId().equals(user.getMember().getId());
+    public boolean isAuthUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!principal.equals("anonymousUser"))
+        {
+            OAuthUser user = (OAuthUser) principal;
+            return this.member.getId().equals(user.getMember().getId());
+        }
+        return false;
     }
-
-    public boolean isAuthUser(OAuthUser user) {
-        return this.member.getId().equals(user.getMember().getId());
-    }
-
 }
