@@ -57,6 +57,7 @@ public class Member {
 
     public Member update(String name, String picture) {
         this.nickname = name;
+        this.profileImage = picture;
         return this;
     }
 
