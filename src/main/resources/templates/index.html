@@ -74,7 +74,7 @@
 							</div>
 						</div>
 
-						<a href="#" class="author">
+						<a th:href="@{'/album/user/' + ${item.member.id}}" class="author">
 							<img th:if="${!#strings.isEmpty(item.member.profileImage)}" th:src="${item.member.profileImage}" id="rgstUserImg"/>
 							<img th:unless="${!#strings.isEmpty(item.member.profileImage)}" id="rgstUserImg" src="/images/avatar.jpg" alt="" />
 							<span class="name" th:text="${item.member.nickname}"></span></a>
@@ -103,7 +103,6 @@
 					</div>
 
 					<p id="wpComment" th:text="${item.content}"></p>
-
 
 					<footer>
 						<ul class="stats">

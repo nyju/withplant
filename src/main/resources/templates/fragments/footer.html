@@ -34,6 +34,47 @@
             $(this).find('form')[0].reset();
         });
 
+
+        function writeComment(e){
+            const comment = e.elements.comment.value;
+            const itemid = e.elements.itemid.value;
+
+            console.log(comment);
+            console.log(itemid);
+            $.ajax({
+                url: '/comment/write/' + itemid,
+                contentType : "application/json; charset=utf-8",
+                dataType: 'text',
+                data : JSON.stringify({'content' : comment, itemid : itemid}),
+                type: 'POST',
+                success: function onData (data) {
+                    console.log(JSON.parse(data));
+                    drawComment(JSON.parse(data), itemid);
+                    e.elements.comment.value='';
+                    //listComment(itemid);
+                },
+                error: function onError (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function deleteComment(commentid, itemid){
+            console.log("deleteComment " + commentid);
+            $.ajax({
+                url: '/comment/delete/' + itemid + '/' + commentid,
+                contentType : "application/json; charset=utf-8",
+                data : JSON.stringify({'itemid' : itemid}),
+                type: 'POST',
+                success: function onData (data) {
+                    console.log(data);
+                    drawComment(data, itemid);
+                },
+                error: function onError (error) {
+                    console.error(error);
+                }
+            });
+        }
     </script>
 </footer>
 </html>

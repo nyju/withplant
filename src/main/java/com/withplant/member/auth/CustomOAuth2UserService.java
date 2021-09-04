@@ -18,8 +18,6 @@ import javax.servlet.http.HttpSession;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService  {
 
     private final MemberRepository memberRepository;
-    private final HttpSession httpSession;
-
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
+    <div class="col-12">
+        <form>
+            <div class="col-12">
+
+                <div class="carousel slide" data-bs-ride="carousel" th:id="${'wpCarouse' + item.id}">
+                    <div class="carousel-indicators" >
+                        <button type="button" th:if="${attStat.index == 0 }"   th:each="att : ${item.attachements}" th:data-bs-target="${'#wpCarouse' + item.id}" th:data-bs-slide-to="${attStat.index}" aria-current="true" class="active"></button>
+                        <button type="button" th:unless="${attStat.index == 0 }" th:each="att : ${item.attachements}" th:data-bs-target="${'#wpCarouse' + item.id}" th:data-bs-slide-to="${attStat.index}"></button>
+
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item" th:each="att : ${item.attachements}"th:classappend="${attStat.index == 0 } ? active">
+                            <img th:src="${'/image/view?path=' + att.path}" alt="" class="d-block w-100"/>
+                        </div>
+                    </div>
+
+                    <button th:if="${item.attachements.size() > 1}" class="carousel-control-prev" type="button" th:data-bs-target="${'#wpCarouse' + item.id}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button th:if="${item.attachements.size() > 1}" class="carousel-control-next" type="button" th:data-bs-target="${'#wpCarouse' + item.id}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <p id="wpComment" th:text="${item.content}"></p>
+
+                <div class="table-wrapper" th:fragment="comTable" id="comTable">
+                    <table>
+                        <tbody id="comTableTbody">
+                        <tr th:each="com : ${item.comments}" >
+                            <td id="comNickname" th:text="${com.member.nickname}"></td>
+                            <td id="comContent" th:text="${com.content}">
+                            </td>
+                            <td id="comrgstDate" th:text="${#temporals.format(com.rgstDate, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:if="${com.isAuthUser()}">
+                                <a th:href="|javascript:updateComment('${com.id}', '${item.id}');|"><i class="fas fa-pencil-alt"></i></a>
+                                <a th:href="|javascript:deleteComment('${com.id}', '${com.album.id}');|" style="padding-left:5px" th:data><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12">
+                    <form>
+                        <div class="col-12">
+                            <input type="hidden" id="itemid" name="itemid" th:value="${item.id}"/>
+                            <div id="comArea" style="width: 88%;display: inline-grid;">
+                                <textarea id="comment" name="comment" rows="1"  action="#"></textarea>
+                            </div>
+                            <input sec:authorize="isAuthenticated()" type="button" class="button-sm" id="rgstBtn" onclick="writeComment(this.form);" value="등록"/>
+                            <input sec:authorize="!isAuthenticated()" type="button" class="button-sm" id="rgstBtn"  data-bs-toggle="modal" data-bs-target="#exampleModal" value="등록"/>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </form>
+    </div>
+<script type="application/javascript" th:inline="javascript">
+
+    function drawComment(array, itemid) {
+        var commentsHtml = "";
+        $(array).each(function (idx, com) {
+            /*<![CDATA[*/
+            var userid= [[${#authentication.principal.member.id}]];
+            /*]]>*/
+
+            var itemId = itemid;
+            commentsHtml +=
+                `<tr>
+							<td id="comNickname">${com.member.nickname}</td>
+							<td id="comContent">${com.content}</td>
+							<td id="comrgstDate" >${moment(com.rgstDate).format('YYYY-MM-DD HH:mm')}</td>`;
+            if(com.member.id == userid){
+                commentsHtml +=
+                    `<td><a href="javascript:updateComment('${com.id}', '${itemId}');"><i class="fas fa-pencil-alt"></i></a>
+									<a href="javascript:deleteComment('${com.id}', '${itemId}');" style="padding-left:5px"><i class="fas fa-trash-alt"></i></a>
+								</td>`;
+            }
+            else{
+                commentsHtml += '<td></td>';
+            }
+            commentsHtml +='</tr>';
+
+        });
+        $("#veiwAlbumModal").find("#comTableTbody").html(commentsHtml);
+    }
+
+</script>
+</html>

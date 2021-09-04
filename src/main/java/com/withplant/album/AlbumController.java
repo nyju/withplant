@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class AlbumController {
@@ -51,10 +53,31 @@ public class AlbumController {
     }
 
     @GetMapping("/album/delete/{itemid}")
-    public String deleteAlbum(@AuthUser Member member, @PathVariable Long itemid, Model model) {
-
+    public String deleteAlbum(@AuthUser Member member, @PathVariable Long itemid) {
         albumService.deleteAlbum(itemid);
 
         return "redirect:/";
+    }
+
+
+
+    @GetMapping("/album/user/{userid}")
+    public String userAlbum(@AuthUser Member member, @PathVariable Long userid, Model model) {
+      //  model.addAttribute(member);
+        List<Album> items = albumRepository.findByMemberId(userid);
+        model.addAttribute(member);
+        model.addAttribute("albumList", items);
+        System.out.println(userid);
+        return "album/user";
+    }
+
+
+    @GetMapping("/album/view/{itemid}")
+    public String viewAlbum(@AuthUser Member member, @PathVariable Long itemid, Model model) {
+
+        Album album = albumService.viewAlbum(itemid);
+        model.addAttribute("item", album);
+
+        return "album/userModal";
     }
 }

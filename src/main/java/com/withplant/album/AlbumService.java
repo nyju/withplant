@@ -47,6 +47,13 @@ public class AlbumService {
         return albumForm;
     }
 
+    public Album viewAlbum(Long itemid) {
+        Optional<Album> albumWrapper = repository.findById(itemid);
+        Album album = albumWrapper.get();
+
+        return album;
+    }
+
     public void updateAlbum(Long itemid, AlbumForm albumForm) {
         Optional<Album> albumWrapper = repository.findById(itemid);
         Album album = albumWrapper.get();

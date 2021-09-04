@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+	  layout:decorator="layout/default">
+
+<div layout:fragment="content">
+<!-- Wrapper -->
+	<div id="wrapper">
+		<!-- Menu -->
+
+		<!-- Main -->
+			<div id="main">
+				<!-- Post -->
+
+					<article class="post">
+						<header>
+							<div class="title">
+								<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+							</div>
+							<div class="meta">
+								<a href="#" class="author"><span class="name" th:text="${member.nickname}"></span>
+									<img th:if="${!#strings.isEmpty(member.profileImage)}" th:src="${member.profileImage}" id="rgstUserImg"/>
+									<img th:unless="${!#strings.isEmpty(member.profileImage)}" id="rgstUserImg" src="/images/avatar.jpg" alt="" />
+								</a>
+								<p>Lorem ipsum</p>
+							</div>
+						</header>
+
+
+						<section>
+							<div class="box alt">
+								<div class="row gtr-uniform">
+									<div class="col-4" th:each="item : ${albumList}">
+										<a th:href="|javascript:viewPopup('${item.id}');|" id="viewPopup" th:value="${item.id}">
+											<span class="image fit">
+												<img th:src="${'/image/view?path=' +  item.attachements[0].path}" alt="" />
+											</span>
+										</a>
+									</div>
+								</div>
+							</div>
+
+							<div class="modal fade" id="veiwAlbumModal" data-refresh="true" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-lg-down" id="comModalDiv">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">view</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+					</article>
+			</div>
+	</div>
+	<script th:inline="javascript">
+		function viewPopup(itemid){
+			console.log("test");
+			var itemid = itemid;
+			var dataURL = '/album/view/' + itemid;
+			$('.modal-body').load(dataURL,function(){
+				$('#veiwAlbumModal').modal('show');
+			});
+		}
+	</script>
+</div>
+</html>
