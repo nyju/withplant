@@ -5,8 +5,8 @@
 
 <div layout:fragment="content">
  <style media="all">
-	 .wpHeader {
-		 display: flex;justify-content: space-between;}
+	 .wpHeader {display: flex;justify-content: space-between;}
+	 a.more {color: #5ba4c6;}
  </style>
 <!-- Wrapper -->
 <div id="wrapper">
@@ -102,7 +102,8 @@
 						</button>
 					</div>
 
-					<p id="wpComment" th:text="${item.content}"></p>
+					<div class="readmore" style="white-space: pre;overflow:hidden;margin: 10px 0 5px 0" th:text="${item.content}">
+					</div>
 
 					<footer>
 						<ul class="stats">
@@ -184,7 +185,7 @@
 						<li th:each="hItem : ${hotList}">
 							<article>
 								<header>
-									<span id="hContent" th:text="${hItem.content}"></span>
+									<!--<span id="hContent" style="white-space: pre;overflow:hidden;" th:text="${hItem.content}"></span>-->
 									<span id="wpRgstDate" style="display:block;float:none;" th:text="${#temporals.format(hItem.rgstDate, 'yyyy-MM-dd HH:mm')}"></span>
 								</header>
 								<a href="single.html" class="image">
@@ -199,6 +200,13 @@
 	</div>
 
 	<script th:inline="javascript">
+		$('.readmore').readmore({
+			collapsedHeight: 100,
+			moreLink: '<a href="#" class="more">more <i class="fas fa-sort-down"></i></a>',
+			lessLink: '<a href="#" class="more">close <i class="fas fa-sort-up"></i></i></a>'
+		});
+
+
 		function drawComment(array, itemid) {
 			var commentsHtml = "";
 			$(array).each(function (idx, com) {
