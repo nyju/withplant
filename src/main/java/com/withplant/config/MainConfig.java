@@ -3,6 +3,7 @@ package com.withplant.config;
 import com.withplant.album.Album;
 import com.withplant.album.AlbumRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,9 @@ public class MainConfig{
         System.out.println("Index");
         List<Album> items = albumRepository.findAll();
         model.addAttribute("albumList", items);
+
+        List<Album> hotItems = albumRepository.findTop5ByOrderByOpnCntDesc();
+        model.addAttribute("hotList", hotItems);
 
         return "index";
     }
